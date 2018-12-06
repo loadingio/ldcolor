@@ -29,18 +29,29 @@
     rgbap: (v) -> r: v.1 * 255 / 100, g: +v.2 * 255 / 100, b: v.3 * 255 / 100, a: +v.4
     hslap: (v) -> h: +v.1, s: v.2 / 100, l: v.3 / 100, a: +v.4
     hslp: (v) -> h: +v.1, s: v.2 / 100, l: v.3 / 100, a: 1
-    all: (input) ->
-      if typeof(input) == \object => return @ <<< input
-      input = "#{input}".trim!.toLowerCase!
-      for k,v of re => if v.exec(input) => return parse[k] that else continue
-      if named[input] => return {r: that .>>. 16, g: (that .>>. 8) .&. 0xff, b: that .&. 0xff, a: 1}
-      if input == \transparent => return {r: NaN, g: NaN, b: NaN, a: 0}
+    all: (v) ->
+      if typeof(v) == \object =>
+        if v["@a"] => v = conv.lab2rgb v
+        else if v["c"] => v = conv.hcl2rgb v
+        return v
+      v = "#{v}".trim!.toLowerCase!
+      for k,v of re => if v.exec(v) => return parse[k] that else continue
+      if named[v] => return {r: that .>>. 16, g: (that .>>. 8) .&. 0xff, b: that .&. 0xff, a: 1}
+      if v == \transparent => return {r: NaN, g: NaN, b: NaN, a: 0}
       return {r: NaN, g: NaN, b: NaN, a: NaN}
 
   
-  ldColor = (input) -> @ <<< parse.all input
+  ldColor = (v) -> @ <<< parse.all v
 
-  convert = do
+  t0 = 4 / 29
+  t1 = 6 / 29
+  t2 = 3 * t1 * t1
+  t3 = t1 * t1 * t1
+  Xn = 0.96422
+  Yn = 1
+  Zn = 0.82521
+
+  conv = do
     _hsl2rgb: (h, m1, m2) ->
       ( if h < 60 => m1 + (m2 - m1) * h / 60
         else if h < 180 => m2
@@ -75,39 +86,70 @@
         sat-v = Cmax - Cmin / val
       h = ( h + 360 ) % 360
       return {h,s,l,a}
+    _rgb2lrgb: (x) -> if (x /= 255) <= 0.04045 => x / 12.92 else Math.pow((x + 0.055) / 1.055, 2.4)
+    _xyz2lab: (x) -> if t > t3 => Math.pow(t, 1 / 3) else t / t2 + t0
+    _lab2xyz: (t) ->  t > t1 ? t * t * t : t2 * (t - t0);
+    _lrgb2rgb: (x) -> 255 * (if x <= 0.0031308 => 12.92 * x else 1.055 * Math.pow(x, 1 / 2.4) - 0.055)
+    lab2rgb: (v) ->
+      [l,a,b,o] = [v["@l"],v["@a"],v["@b"],v["a"]]
+      y = (l + 16) / 116
+      x = if isNaN(a) => y else y + a / 500
+      z = if isNaN(b) => y else y - b / 200
+      x = Xn * conv._lab2xyz(x)
+      y = Yn * conv._lab2xyz(y)
+      z = Zn * conv._lab2xyz(z)
+      return
+        r: conv._lrgb2rgb( 3.1338561 * x - 1.6168667 * y - 0.4906146 * z)
+        g: conv._lrgb2rgb(-0.9787684 * x + 1.9161415 * y + 0.0334540 * z)
+        b: conv._lrgb2rgb( 0.0719453 * x - 0.2289914 * y + 1.4052427 * z)
+        a: o
+    lab2hcl: (v) ->
+      [l,a,b,o] = [v["@l"],v["@a"],v["@b"],v["a"]]
+      if a == 0 and b == 0 => return h: NaN, c: 0, l: l, a: o
+      h = Math.atan2(b, a) * 180 / Math.PI
+      return
+        h: if h < 0 => h + 360 else h
+        c: Math.sqrt(a * a + b * b)
+        l: l
+        a: o
+    hcl2lab: (v) ->
+      if isNaN v.h => return {"@l": v.l, "@a": 0, "@b": 0, a: v.a}
+      h = v.h * Math.PI / 180
+      return {"@l": o.l, "@a": Math.cos(h) * v.c, "@b": Math.sin(h) * v.c, a: v.a}
+
+    hcl2rgb: (v) -> @lab2rgb @hcl2lab v
 
   utils = do
-    rgb: (input) ->
-      ret = parse.all input
-      if ret.h => return convert.hsl2rgb(ret) else ret
-    hsl: (input) ->
-      ret = parse.all input
-      if ret.r => return convert.rgb2hsl(ret) else ret
-    hex: (input) ->
-      ret = parse.all input
-      if ret.h => ret = convert.hsl2rgb(ret)
+    rgb: (v) ->
+      ret = parse.all v
+      if ret.h => return conv.hsl2rgb(ret) else ret
+    hsl: (v) ->
+      ret = parse.all v
+      if ret.r => return conv.rgb2hsl(ret) else ret
+    hex: (v) ->
+      ret = utils.rgb v
       return "#" + ((Math.floor(ret.r) .<<. 16) + (Math.floor(ret.g) .<<. 8) + Math.floor(ret.b)).toString(16)
-    int: (input) ->
-      return (Math.floor(ret.r) .<<. 16) + (Math.floor(ret.g) .<<. 8) + Math.floor(ret.b)
+    lab: (v) ->
+      {r,g,b,a} = utils.rgb v
+      r = conv._rgb2lrgb r
+      g = conv._rgb2lrgb g
+      b = conv._rgb2lrgb b
+      y = conv._xyz2lab((0.2225045 * r + 0.7168786 * g + 0.0606169 * b) / Yn)
+      if r == g and g == b => x = z = y
+      else 
+        x = conv._xyz2lab((0.4360747 * r + 0.3850649 * g + 0.1430804 * b) / Xn)
+        z = conv._xyz2lab((0.0139322 * r + 0.0971045 * g + 0.7141733 * b) / Zn)
+      return {"@l": 116 * y - 16, "@b": 500 * (x - y), "@a": 200 * (y - z), a: a}
+
+    hcl: (v) -> ret = conv.lab2hcl(utils.lab v)
+
+    int: (v) ->
+      return (Math.floor(v.r) .<<. 16) + (Math.floor(v.g) .<<. 8) + Math.floor(v.b)
 
   ldColor <<< utils
   ldColor.prototype = Object.create(Object.prototype) <<< utils
+  for k,v of utils => ldColor.prototype[k] = -> v(@)
 
   module.exports = {}
 )!
 
-
-/*
-  ret = new ldColor \#f00
-  console.log ret
-  ret = new ldColor \#ff9911
-  console.log ret
-  ret = new ldColor 'rgb(255,90,16)'
-  console.log ret
-  ret = new ldColor 'rgb(100%,50%,0%)'
-  console.log ret
-  ret = new ldColor 'steelblue'
-  console.log ret
-  console.log ldColor.hex ret
-  console.log (ldColor.int ret).toString(16)
-  */
