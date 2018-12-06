@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+mkdir -p dist
+rm dist/*.js
+lsc -cpb src/main.ls > dist/ldColor.named.js
+uglifyjs dist/ldColor.named.js > dist/ldColor.named.min.js
+
+cat src/main.ls | grep -v "named = " | lsc -cbsp > dist/ldColor.js
+uglifyjs dist/ldColor.js > dist/ldColor.min.js

@@ -35,7 +35,7 @@
       else if typeof(o) == \number => return conv.num2rgb o
       o = "#{o}".trim!.toLowerCase!
       for k,v of re => if v.exec(o) => return parse[k] that else continue
-      if named[o] => return conv.num2rgb named[o]
+      if named? and named[o] => return conv.num2rgb named[o]
       if o == \transparent => return {r: NaN, g: NaN, b: NaN, a: 0}
       return {r: NaN, g: NaN, b: NaN, a: NaN}
 
@@ -151,6 +151,6 @@
   ldColor.prototype = Object.create(Object.prototype) <<< utils
   for k,v of utils => ((k,v) -> ldColor.prototype[k] = -> v(@))(k,v)
 
-  module.exports = ldColor
+  if module => module.exports = ldColor
+  else window.ldColor = ldColor
 )!
-
