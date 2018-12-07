@@ -234,6 +234,9 @@
     all: function(o){
       var k, ref$, v, that;
       if (typeof o === 'object') {
+        if (!(o.a != null)) {
+          o.a = 1;
+        }
         return o["@a"]
           ? o = conv.lab2rgb(o)
           : o["c"] ? o = conv.hcl2rgb(o) : o;
@@ -315,8 +318,9 @@
       };
     },
     rgb2hsl: function(arg$){
-      var r, g, b, a, Cmax, Cmin, delta, l, ref$, h, s, val, satV;
+      var r, g, b, a, ref$, Cmax, Cmin, delta, l, h, s;
       r = arg$.r, g = arg$.g, b = arg$.b, a = arg$.a;
+      ref$ = [r / 255, g / 255, b / 255], r = ref$[0], g = ref$[1], b = ref$[2];
       Cmax = Math.max(r, g, b);
       Cmin = Math.min(r, g, b);
       delta = Cmax - Cmin;
@@ -334,9 +338,7 @@
             return 60 * ((r - g) / delta + 4);
           }
         }());
-        s = delta / (1 - Math.abs(2 * lit - 1));
-        val = Cmax;
-        satV = Cmax - Cmin / val;
+        s = delta / (1 - Math.abs(2 * l - 1));
       }
       h = (h + 360) % 360;
       return {
@@ -361,12 +363,11 @@
       }
     },
     _lab2xyz: function(t){
-      var ref$;
-      return (ref$ = t > t1) != null
-        ? ref$
-        : t * t * {
-          t: t2 * (t - t0)
-        };
+      if (t > t1) {
+        return t * t * t;
+      } else {
+        return t2 * (t - t0);
+      }
     },
     _lrgb2rgb: function(x){
       return 255 * (x <= 0.0031308
@@ -439,11 +440,19 @@
     rgb: function(v){
       var ret;
       ret = parse.all(v);
-      if (ret.h) {
+      if (ret.c != null) {
+        return conv.lab2rgb(conv.hcl2lab(ret));
+      }
+      if (ret.h != null) {
         return conv.hsl2rgb(ret);
       } else {
         return ret;
       }
+    },
+    rgbaStr: function(v){
+      var ret;
+      ret = utils.rgb(v);
+      return "rgba(" + ret.r + ", " + ret.g + ", " + ret.b + ", " + ret.a + ")";
     },
     hsl: function(v){
       var ret;
@@ -457,10 +466,17 @@
     hex: function(v){
       var ret;
       ret = utils.rgb(v);
-      return "#" + ((Math.floor(ret.r) << 16) + (Math.floor(ret.g) << 8) + Math.floor(ret.b)).toString(16);
+      return "#" + ['r', 'g', 'b'].map(function(it){
+        var v;
+        v = Math.floor(ret[it]).toString(16) + "";
+        return v = repeatString$("0", 2 - v.length) + v;
+      }).join('');
     },
     lab: function(v){
       var ref$, r, g, b, a, y, x, z;
+      if (v.c) {
+        return conv.hcl2lab(v);
+      }
       ref$ = utils.rgb(v), r = ref$.r, g = ref$.g, b = ref$.b, a = ref$.a;
       r = conv._rgb2lrgb(r);
       g = conv._rgb2lrgb(g);
@@ -484,7 +500,16 @@
       return ret = conv.lab2hcl(utils.lab(v));
     },
     int: function(v){
+      v = utils.rgb(v);
       return (Math.floor(v.r) << 16) + (Math.floor(v.g) << 8) + Math.floor(v.b);
+    },
+    rand: function(){
+      return {
+        h: Math.random() * 360,
+        s: Math.random(),
+        l: Math.random(),
+        a: 1
+      };
     }
   };
   import$(ldColor, utils);
@@ -493,7 +518,7 @@
     v = utils[k];
     fn$(k, v);
   }
-  if (module) {
+  if (typeof module != 'undefined' && module !== null) {
     return module.exports = ldColor;
   } else {
     return window.ldColor = ldColor;
@@ -508,4 +533,8 @@ function import$(obj, src){
   var own = {}.hasOwnProperty;
   for (var key in src) if (own.call(src, key)) obj[key] = src[key];
   return obj;
+}
+function repeatString$(str, n){
+  for (var r = ''; n > 0; (n >>= 1) && (str += str)) if (n & 1) r += str;
+  return r;
 }

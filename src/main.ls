@@ -30,6 +30,7 @@
     hslp: (v) -> h: +v.1, s: v.2 / 100, l: v.3 / 100, a: 1
     all: (o) ->
       if typeof(o) == \object =>
+        if !(o.a?) => o.a = 1
         return if o["@a"] => o = conv.lab2rgb o
         else if o["c"] => o = conv.hcl2rgb o else o
       else if typeof(o) == \number => return conv.num2rgb o
@@ -71,6 +72,7 @@
         a: a
       }
     rgb2hsl: ({r,g,b,a}) -> 
+      [r,g,b] = [r/255,g/255,b/255]
       Cmax = Math.max(r,g,b)
       Cmin = Math.min(r,g,b)
       delta = Cmax - Cmin
@@ -81,14 +83,12 @@
           | Cmax == r => 60 * ((( g - b ) / delta ) % 6)
           | Cmax == g => 60 * ((( b - r ) / delta ) + 2)
           | Cmax == b => 60 * ((( r - g ) / delta ) + 4)
-        s = delta / ( 1 - Math.abs( 2 * lit - 1) )
-        val = Cmax
-        sat-v = Cmax - Cmin / val
+        s = delta / ( 1 - Math.abs( 2 * l - 1) )
       h = ( h + 360 ) % 360
       return {h,s,l,a}
     _rgb2lrgb: (x) -> if (x /= 255) <= 0.04045 => x / 12.92 else Math.pow((x + 0.055) / 1.055, 2.4)
     _xyz2lab: (t) -> if t > t3 => Math.pow(t, 1 / 3) else t / t2 + t0
-    _lab2xyz: (t) ->  t > t1 ? t * t * t : t2 * (t - t0);
+    _lab2xyz: (t) -> if t > t1 => t * t * t else t2 * (t - t0)
     _lrgb2rgb: (x) -> 255 * (if x <= 0.0031308 => 12.92 * x else 1.055 * Math.pow(x, 1 / 2.4) - 0.055)
     lab2rgb: (v) ->
       [l,a,b,o] = [v["@l"],v["@a"],v["@b"],if v["a"]? => v["a"] else 1]
@@ -123,14 +123,23 @@
   utils = do
     rgb: (v) ->
       ret = parse.all v
-      if ret.h => return conv.hsl2rgb(ret) else ret
+      if ret.c? => return conv.lab2rgb conv.hcl2lab ret
+      if ret.h? => return conv.hsl2rgb(ret) else ret
+    rgbaStr: (v) ->
+      ret = utils.rgb v
+      "rgba(#{ret.r}, #{ret.g}, #{ret.b}, #{ret.a})"
     hsl: (v) ->
       ret = parse.all v
       if ret.r => return conv.rgb2hsl(ret) else ret
     hex: (v) ->
       ret = utils.rgb v
-      return "#" + ((Math.floor(ret.r) .<<. 16) + (Math.floor(ret.g) .<<. 8) + Math.floor(ret.b)).toString(16)
+      "#" + <[r g b]>
+        .map ->
+          v = "#{Math.floor(ret[it]).toString(16)}"
+          v = "0" * (2 - v.length) + v
+        .join('')
     lab: (v) ->
+      if v.c => return conv.hcl2lab v
       {r,g,b,a} = utils.rgb v
       r = conv._rgb2lrgb r
       g = conv._rgb2lrgb g
@@ -142,15 +151,18 @@
         z = conv._xyz2lab((0.0139322 * r + 0.0971045 * g + 0.7141733 * b) / Zn)
       return {"@l": 116 * y - 16, "@a": 500 * (x - y), "@b": 200 * (y - z), a: a}
 
-    hcl: (v) -> ret = conv.lab2hcl(utils.lab v)
+    hcl: (v) -> conv.lab2hcl(utils.lab v)
 
     int: (v) ->
+      v = utils.rgb v
       return (Math.floor(v.r) .<<. 16) + (Math.floor(v.g) .<<. 8) + Math.floor(v.b)
+
+    rand: -> {h: Math.random!*360, s: Math.random!, l: Math.random!, a: 1}
 
   ldColor <<< utils
   ldColor.prototype = Object.create(Object.prototype) <<< utils
   for k,v of utils => ((k,v) -> ldColor.prototype[k] = -> v(@))(k,v)
 
-  if module => module.exports = ldColor
+  if module? => module.exports = ldColor
   else window.ldColor = ldColor
 )!
