@@ -89,7 +89,7 @@
     _rgb2lrgb: (x) -> if (x /= 255) <= 0.04045 => x / 12.92 else Math.pow((x + 0.055) / 1.055, 2.4)
     _xyz2lab: (t) -> if t > t3 => Math.pow(t, 1 / 3) else t / t2 + t0
     _lab2xyz: (t) -> if t > t1 => t * t * t else t2 * (t - t0)
-    _lrgb2rgb: (x) -> 255 * (if x <= 0.0031308 => 12.92 * x else 1.055 * Math.pow(x, 1 / 2.4) - 0.055)
+    _lrgb2rgb: (x) -> (255 * (if x <= 0.0031308 => 12.92 * x else 1.055 * Math.pow(x, 1 / 2.4) - 0.055)) <? 255 >? 0
     lab2rgb: (v) ->
       [l,a,b,o] = [v["@l"],v["@a"],v["@b"],if v["a"]? => v["a"] else 1]
       y = (l + 16) / 116
@@ -131,13 +131,15 @@
     hsl: (v) ->
       ret = parse.all v
       if ret.r => return conv.rgb2hsl(ret) else ret
-    hex: (v) ->
+    hex: (v, compact = false) ->
       ret = utils.rgb v
-      "#" + <[r g b]>
+      ret = <[r g b]>
         .map ->
           v = "#{Math.floor(ret[it]).toString(16)}"
           v = "0" * (2 - v.length) + v
         .join('')
+      if compact and ret.0 == ret.1 and ret.2 == ret.3 and ret.4 == ret.5 => ret = ret.0 + ret.2 + ret.4
+      "#" + ret
     lab: (v) ->
       if v.c => return conv.hcl2lab v
       {r,g,b,a} = utils.rgb v

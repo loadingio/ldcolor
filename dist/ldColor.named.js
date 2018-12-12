@@ -370,9 +370,10 @@
       }
     },
     _lrgb2rgb: function(x){
-      return 255 * (x <= 0.0031308
+      var ref$, ref1$;
+      return (ref$ = (ref1$ = 255 * (x <= 0.0031308
         ? 12.92 * x
-        : 1.055 * Math.pow(x, 1 / 2.4) - 0.055);
+        : 1.055 * Math.pow(x, 1 / 2.4) - 0.055)) < 255 ? ref1$ : 255) > 0 ? ref$ : 0;
     },
     lab2rgb: function(v){
       var ref$, l, a, b, o, y, x, z;
@@ -463,14 +464,19 @@
         return ret;
       }
     },
-    hex: function(v){
+    hex: function(v, compact){
       var ret;
+      compact == null && (compact = false);
       ret = utils.rgb(v);
-      return "#" + ['r', 'g', 'b'].map(function(it){
+      ret = ['r', 'g', 'b'].map(function(it){
         var v;
         v = Math.floor(ret[it]).toString(16) + "";
         return v = repeatString$("0", 2 - v.length) + v;
       }).join('');
+      if (compact && ret[0] === ret[1] && ret[2] === ret[3] && ret[4] === ret[5]) {
+        ret = ret[0] + ret[2] + ret[4];
+      }
+      return "#" + ret;
     },
     lab: function(v){
       var ref$, r, g, b, a, y, x, z;
@@ -496,8 +502,7 @@
       };
     },
     hcl: function(v){
-      var ret;
-      return ret = conv.lab2hcl(utils.lab(v));
+      return conv.lab2hcl(utils.lab(v));
     },
     int: function(v){
       v = utils.rgb(v);
