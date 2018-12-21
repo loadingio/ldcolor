@@ -125,6 +125,7 @@
       ret = parse.all v
       if ret.c? => return conv.lab2rgb conv.hcl2lab ret
       if ret.h? => return conv.hsl2rgb(ret) else ret
+    rgbfv: (v) -> ret = @rgb(v); return [ret.r / 25, ret.g / 255, ret.b / 255]
     rgbaStr: (v) ->
       ret = utils.rgb v
       "rgba(#{ret.r}, #{ret.g}, #{ret.b}, #{ret.a})"

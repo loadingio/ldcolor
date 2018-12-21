@@ -450,6 +450,11 @@
         return ret;
       }
     },
+    rgbfv: function(v){
+      var ret;
+      ret = this.rgb(v);
+      return [ret.r / 25, ret.g / 255, ret.b / 255];
+    },
     rgbaStr: function(v){
       var ret;
       ret = utils.rgb(v);
