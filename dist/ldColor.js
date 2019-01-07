@@ -308,7 +308,7 @@
     rgbaStr: function(v){
       var ret;
       ret = utils.rgb(v);
-      return "rgba(" + ret.r + ", " + ret.g + ", " + ret.b + ", " + ret.a + ")";
+      return "rgba(" + Math.floor(ret.r) + ", " + Math.floor(ret.g) + ", " + Math.floor(ret.b) + ", " + ret.a + ")";
     },
     hsl: function(v){
       var ret;

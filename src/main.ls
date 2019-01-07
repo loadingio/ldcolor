@@ -128,7 +128,7 @@
     rgbfv: (v) -> ret = @rgb(v); return [ret.r / 255, ret.g / 255, ret.b / 255]
     rgbaStr: (v) ->
       ret = utils.rgb v
-      "rgba(#{ret.r}, #{ret.g}, #{ret.b}, #{ret.a})"
+      "rgba(#{Math.floor ret.r}, #{Math.floor ret.g}, #{Math.floor ret.b}, #{ret.a})"
     hsl: (v) ->
       ret = parse.all v
       if ret.r => return conv.rgb2hsl(ret) else ret
