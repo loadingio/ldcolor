@@ -82,14 +82,18 @@
       };
     },
     all: function(o){
-      var k, ref$, v, that;
+      var that, ref$, k, v;
       if (typeof o === 'object') {
         if (!(o.a != null)) {
           o.a = 1;
         }
         return o["@a"]
           ? o = conv.lab2rgb(o)
-          : o["c"] ? o = conv.hcl2rgb(o) : o;
+          : o["c"]
+            ? o = conv.hcl2rgb(o)
+            : o.hex ? (that = re.hex3.exec(o.hex))
+              ? (ref$ = parse.hex3(that) || {}, ref$.a = o.a, ref$)
+              : (that = re.hex6.exec(o.hex)) ? (ref$ = parse.hex6(that), ref$.a = o.a, ref$) : o : o;
       } else if (typeof o === 'number') {
         return conv.num2rgb(o);
       }
@@ -288,8 +292,15 @@
     }
   };
   utils = {
+    same: function(a, b){
+      var ref$;
+      b == null && (b = this);
+      ref$ = [this.rgb(a), this.rgb(b)], a = ref$[0], b = ref$[1];
+      return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
+    },
     rgb: function(v){
       var ret;
+      v == null && (v = this);
       ret = parse.all(v);
       if (ret.c != null) {
         return conv.lab2rgb(conv.hcl2lab(ret));
@@ -302,16 +313,32 @@
     },
     rgbfv: function(v){
       var ret;
+      v == null && (v = this);
       ret = this.rgb(v);
       return [ret.r / 255, ret.g / 255, ret.b / 255];
     },
+    web: function(v){
+      var ret;
+      v == null && (v = this);
+      ret = utils.rgb(v);
+      if (ret.a != null && isNaN(ret.a)) {
+        return "transparent";
+      }
+      if (ret.a < 1) {
+        return this.rgbaStr(ret);
+      } else {
+        return this.hex(ret);
+      }
+    },
     rgbaStr: function(v){
       var ret;
+      v == null && (v = this);
       ret = utils.rgb(v);
       return "rgba(" + Math.floor(ret.r) + ", " + Math.floor(ret.g) + ", " + Math.floor(ret.b) + ", " + ret.a + ")";
     },
     hsl: function(v){
       var ret;
+      v == null && (v = this);
       ret = parse.all(v);
       if (ret.r) {
         return conv.rgb2hsl(ret);
@@ -320,8 +347,12 @@
       }
     },
     hex: function(v, compact){
-      var ret;
+      var ref$, ret;
+      v == null && (v = this);
       compact == null && (compact = false);
+      if (v != null && typeof v === 'boolean') {
+        ref$ = [this, v], v = ref$[0], compact = ref$[1];
+      }
       ret = utils.rgb(v);
       ret = ['r', 'g', 'b'].map(function(it){
         var v;
@@ -335,6 +366,7 @@
     },
     lab: function(v){
       var ref$, r, g, b, a, y, x, z;
+      v == null && (v = this);
       if (v.c) {
         return conv.hcl2lab(v);
       }
@@ -357,9 +389,11 @@
       };
     },
     hcl: function(v){
+      v == null && (v = this);
       return conv.lab2hcl(utils.lab(v));
     },
     int: function(v){
+      v == null && (v = this);
       v = utils.rgb(v);
       return (Math.floor(v.r) << 16) + (Math.floor(v.g) << 8) + Math.floor(v.b);
     },

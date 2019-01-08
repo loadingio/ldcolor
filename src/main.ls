@@ -32,7 +32,12 @@
       if typeof(o) == \object =>
         if !(o.a?) => o.a = 1
         return if o["@a"] => o = conv.lab2rgb o
-        else if o["c"] => o = conv.hcl2rgb o else o
+        else if o["c"] => o = conv.hcl2rgb o
+        else if o.hex =>
+          if re.hex3.exec(o.hex) => (parse.hex3(that) or {}) <<< {a: o.a}
+          else if re.hex6.exec(o.hex) => (parse.hex6(that) <<< {a: o.a})
+          else o
+        else o
       else if typeof(o) == \number => return conv.num2rgb o
       o = "#{o}".trim!.toLowerCase!
       for k,v of re => if v.exec(o) => return parse[k] that else continue
@@ -121,18 +126,26 @@
     hcl2rgb: (v) -> @lab2rgb @hcl2lab v
 
   utils = do
-    rgb: (v) ->
+    same: (a, b = @) ->
+      [a,b] = [@rgb(a), @rgb(b)]
+      return ( a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a )
+    rgb: (v = @) ->
       ret = parse.all v
       if ret.c? => return conv.lab2rgb conv.hcl2lab ret
       if ret.h? => return conv.hsl2rgb(ret) else ret
-    rgbfv: (v) -> ret = @rgb(v); return [ret.r / 255, ret.g / 255, ret.b / 255]
-    rgbaStr: (v) ->
+    rgbfv: (v = @) -> ret = @rgb(v); return [ret.r / 255, ret.g / 255, ret.b / 255]
+    web: (v = @) ->
+      ret = utils.rgb v
+      if ret.a? and isNaN(ret.a) => return "transparent"
+      if ret.a < 1 => @rgbaStr ret else @hex ret
+    rgbaStr: (v = @) ->
       ret = utils.rgb v
       "rgba(#{Math.floor ret.r}, #{Math.floor ret.g}, #{Math.floor ret.b}, #{ret.a})"
-    hsl: (v) ->
+    hsl: (v = @) ->
       ret = parse.all v
       if ret.r => return conv.rgb2hsl(ret) else ret
-    hex: (v, compact = false) ->
+    hex: (v = @, compact = false) ->
+      if v? and typeof(v) == \boolean => [v,compact] = [@, v]
       ret = utils.rgb v
       ret = <[r g b]>
         .map ->
@@ -141,7 +154,7 @@
         .join('')
       if compact and ret.0 == ret.1 and ret.2 == ret.3 and ret.4 == ret.5 => ret = ret.0 + ret.2 + ret.4
       "#" + ret
-    lab: (v) ->
+    lab: (v = @) ->
       if v.c => return conv.hcl2lab v
       {r,g,b,a} = utils.rgb v
       r = conv._rgb2lrgb r
@@ -154,9 +167,9 @@
         z = conv._xyz2lab((0.0139322 * r + 0.0971045 * g + 0.7141733 * b) / Zn)
       return {"@l": 116 * y - 16, "@a": 500 * (x - y), "@b": 200 * (y - z), a: a}
 
-    hcl: (v) -> conv.lab2hcl(utils.lab v)
+    hcl: (v = @) -> conv.lab2hcl(utils.lab v)
 
-    int: (v) ->
+    int: (v = @) ->
       v = utils.rgb v
       return (Math.floor(v.r) .<<. 16) + (Math.floor(v.g) .<<. 8) + Math.floor(v.b)
 
