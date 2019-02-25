@@ -143,7 +143,7 @@
       "rgba(#{Math.floor ret.r}, #{Math.floor ret.g}, #{Math.floor ret.b}, #{ret.a})"
     hsl: (v = @) ->
       ret = parse.all v
-      if ret.r => return conv.rgb2hsl(ret) else ret
+      if ret.r? => return conv.rgb2hsl(ret) else ret
     hex: (v = @, compact = false) ->
       if v? and typeof(v) == \boolean => [v,compact] = [@, v]
       ret = utils.rgb v

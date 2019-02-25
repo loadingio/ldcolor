@@ -340,7 +340,7 @@
       var ret;
       v == null && (v = this);
       ret = parse.all(v);
-      if (ret.r) {
+      if (ret.r != null) {
         return conv.rgb2hsl(ret);
       } else {
         return ret;
