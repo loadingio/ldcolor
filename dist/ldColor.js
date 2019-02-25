@@ -319,9 +319,10 @@
       ret = this.rgb(v);
       return [ret.r / 255, ret.g / 255, ret.b / 255];
     },
-    web: function(v){
+    web: function(v, compact){
       var ret;
       v == null && (v = this);
+      compact == null && (compact = false);
       ret = utils.rgb(v);
       if (ret.a != null && isNaN(ret.a)) {
         return "transparent";
@@ -329,7 +330,7 @@
       if (ret.a < 1) {
         return this.rgbaStr(ret);
       } else {
-        return this.hex(ret);
+        return this.hex(ret, compact);
       }
     },
     rgbaStr: function(v){

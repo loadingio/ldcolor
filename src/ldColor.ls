@@ -134,10 +134,10 @@
       if ret.c? => return conv.lab2rgb conv.hcl2lab ret
       if ret.h? => return conv.hsl2rgb(ret) else ret
     rgbfv: (v = @) -> ret = @rgb(v); return [ret.r / 255, ret.g / 255, ret.b / 255]
-    web: (v = @) ->
+    web: (v = @, compact = false) ->
       ret = utils.rgb v
       if ret.a? and isNaN(ret.a) => return "transparent"
-      if ret.a < 1 => @rgbaStr ret else @hex ret
+      if ret.a < 1 => @rgbaStr ret else @hex ret, compact
     rgbaStr: (v = @) ->
       ret = utils.rgb v
       "rgba(#{Math.floor ret.r}, #{Math.floor ret.g}, #{Math.floor ret.b}, #{ret.a})"
