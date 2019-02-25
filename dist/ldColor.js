@@ -152,7 +152,7 @@
           : h < 240 ? m1 + (m2 - m1) * (240 - h) / 60 : m1) * 255;
     },
     hsl2rgb: function(arg$){
-      var h, s, l, a, m2, m1;
+      var h, s, l, a, m2, m1, ref$;
       h = arg$.h, s = arg$.s, l = arg$.l, a = arg$.a;
       h = h % 360 + (h < 0) * 360;
       s = isNaN(h) || isNaN(s) ? 0 : s;
@@ -161,13 +161,13 @@
         : 1 - l) * s;
       m1 = 2 * l - m2;
       return {
-        r: this._hsl2rgb(h >= 240
+        r: (ref$ = this._hsl2rgb(h >= 240
           ? h - 240
-          : h + 120, m1, m2),
-        g: this._hsl2rgb(h, m1, m2),
-        b: this._hsl2rgb(h < 120
+          : h + 120, m1, m2)) > 0 ? ref$ : 0,
+        g: (ref$ = this._hsl2rgb(h, m1, m2)) > 0 ? ref$ : 0,
+        b: (ref$ = this._hsl2rgb(h < 120
           ? h + 240
-          : h - 120, m1, m2),
+          : h - 120, m1, m2)) > 0 ? ref$ : 0,
         a: a
       };
     },
@@ -262,10 +262,12 @@
       }
       h = Math.atan2(b, a) * 180 / Math.PI;
       return {
-        h: h < 0 ? h + 360 : h,
+        h: h < 0
+          ? h + 360
+          : h > 0 ? h : 0,
         c: Math.sqrt(a * a + b * b),
-        l: l,
-        a: o
+        l: l > 0 ? l : 0,
+        a: (ref$ = o > 0 ? o : 0) < 1 ? ref$ : 1
       };
     },
     hcl2lab: function(v){
@@ -356,6 +358,7 @@
       ret = utils.rgb(v);
       ret = ['r', 'g', 'b'].map(function(it){
         var v;
+        console.log(ret[it]);
         v = Math.floor(ret[it]).toString(16) + "";
         return v = repeatString$("0", 2 - v.length) + v;
       }).join('');

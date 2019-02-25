@@ -71,9 +71,9 @@
       m2 = l + (if l < 0.5 => l else 1 - l) * s
       m1 = 2 * l - m2
       {
-        r: @_hsl2rgb (if h >= 240 => h - 240 else h + 120), m1, m2
-        g: @_hsl2rgb h, m1, m2
-        b: @_hsl2rgb (if h < 120 => h + 240 else h - 120), m1, m2
+        r: @_hsl2rgb((if h >= 240 => h - 240 else h + 120), m1, m2) >? 0
+        g: @_hsl2rgb(h, m1, m2) >? 0
+        b: @_hsl2rgb((if h < 120 => h + 240 else h - 120), m1, m2) >? 0
         a: a
       }
     rgb2hsl: ({r,g,b,a}) -> 
@@ -113,10 +113,10 @@
       if a == 0 and b == 0 => return h: NaN, c: 0, l: l, a: o
       h = Math.atan2(b, a) * 180 / Math.PI
       return
-        h: if h < 0 => h + 360 else h
+        h: if h < 0 => h + 360 else h >? 0
         c: Math.sqrt(a * a + b * b)
-        l: l
-        a: o
+        l: l >? 0
+        a: o >? 0 <? 1
     hcl2lab: (v) ->
       v.a = if v.a? => v.a else 1
       if isNaN v.h => return {"@l": v.l, "@a": 0, "@b": 0, a: v.a}
