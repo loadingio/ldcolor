@@ -508,7 +508,6 @@
       ret = utils.rgb(v);
       ret = ['r', 'g', 'b'].map(function(it){
         var v;
-        console.log(ret[it]);
         v = Math.floor(ret[it]).toString(16) + "";
         return v = repeatString$("0", 2 - v.length) + v;
       }).join('');
