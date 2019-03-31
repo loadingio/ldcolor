@@ -487,7 +487,7 @@
       var ret;
       v == null && (v = this);
       ret = utils.rgb(v);
-      return "rgba(" + Math.floor(ret.r) + ", " + Math.floor(ret.g) + ", " + Math.floor(ret.b) + ", " + ret.a + ")";
+      return "rgba(" + Math.round(ret.r) + ", " + Math.round(ret.g) + ", " + Math.round(ret.b) + ", " + ret.a + ")";
     },
     hsl: function(v){
       var ret;
@@ -508,8 +508,8 @@
       }
       ret = utils.rgb(v);
       ret = ['r', 'g', 'b'].map(function(it){
-        var v;
-        v = Math.floor(ret[it]).toString(16) + "";
+        var v, ref$;
+        v = ((ref$ = Math.round(ret[it])) < 255 ? ref$ : 255).toString(16) + "";
         return v = repeatString$("0", 2 - v.length) + v;
       }).join('');
       if (compact && ret[0] === ret[1] && ret[2] === ret[3] && ret[4] === ret[5]) {
@@ -548,7 +548,7 @@
     int: function(v){
       v == null && (v = this);
       v = utils.rgb(v);
-      return (Math.floor(v.r) << 16) + (Math.floor(v.g) << 8) + Math.floor(v.b);
+      return (Math.round(v.r) << 16) + (Math.round(v.g) << 8) + Math.round(v.b);
     },
     rand: function(){
       return {

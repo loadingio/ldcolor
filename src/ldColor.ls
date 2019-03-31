@@ -140,7 +140,7 @@
       if ret.a < 1 => @rgbaStr ret else @hex ret, compact
     rgbaStr: (v = @) ->
       ret = utils.rgb v
-      "rgba(#{Math.floor ret.r}, #{Math.floor ret.g}, #{Math.floor ret.b}, #{ret.a})"
+      "rgba(#{Math.round ret.r}, #{Math.round ret.g}, #{Math.round ret.b}, #{ret.a})"
     hsl: (v = @) ->
       ret = parse.all v
       if ret.r? => return conv.rgb2hsl(ret) else ret
@@ -149,7 +149,7 @@
       ret = utils.rgb v
       ret = <[r g b]>
         .map ->
-          v = "#{Math.floor(ret[it]).toString(16)}"
+          v = "#{(Math.round(ret[it]) <? 255).toString(16)}"
           v = "0" * (2 - v.length) + v
         .join('')
       if compact and ret.0 == ret.1 and ret.2 == ret.3 and ret.4 == ret.5 => ret = ret.0 + ret.2 + ret.4
@@ -171,7 +171,7 @@
 
     int: (v = @) ->
       v = utils.rgb v
-      return (Math.floor(v.r) .<<. 16) + (Math.floor(v.g) .<<. 8) + Math.floor(v.b)
+      return (Math.round(v.r) .<<. 16) + (Math.round(v.g) .<<. 8) + Math.round(v.b)
 
     rand: -> {h: Math.random!*360, s: Math.random!, l: Math.random!, a: 1}
 
