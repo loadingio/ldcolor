@@ -155,8 +155,8 @@
   ReN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)\\s*";
   ReP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*";
   re = {
-    hex3: /^#([0-9a-f]{3})$/,
-    hex6: /^#([0-9a-f]{6})$/,
+    hex3: /^#([0-9a-fA-F]{3})$/,
+    hex6: /^#([0-9a-fA-F]{6})$/,
     rgbint: new RegExp("^rgb\\(" + [ReI, ReI, ReI] + "\\)$"),
     rgbp: new RegExp("^rgb\\(" + [ReP, ReP, ReP] + "\\)$"),
     rgbaint: new RegExp("^rgba\\(" + [ReI, ReI, ReI, ReN] + "\\)$"),
