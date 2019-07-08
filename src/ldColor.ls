@@ -37,6 +37,7 @@
           if re.hex3.exec(o.hex) => (parse.hex3(that) or {}) <<< {a: o.a}
           else if re.hex6.exec(o.hex) => (parse.hex6(that) <<< {a: o.a})
           else o
+        else if o.value => o.value
         else o
       else if typeof(o) == \number => return conv.num2rgb o
       o = "#{o}".trim!.toLowerCase!

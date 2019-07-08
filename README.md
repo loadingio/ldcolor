@@ -42,6 +42,7 @@ ldColor is an object with following fields:
    * Generic
      * a: Alpha component, if applicable.
      * hex: hex code for this color, if exists.
+     * value: web color value for this color. deprecated.
      * offset: between 0 ~ 1, position if visualized. Also work as offset in gradient.
      * mean: purpose for this color in a palette, if applicable.
    * Application Defined

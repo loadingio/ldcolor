@@ -91,9 +91,11 @@
           ? o = conv.lab2rgb(o)
           : o["c"]
             ? o = conv.hcl2rgb(o)
-            : o.hex ? (that = re.hex3.exec(o.hex))
-              ? (ref$ = parse.hex3(that) || {}, ref$.a = o.a, ref$)
-              : (that = re.hex6.exec(o.hex)) ? (ref$ = parse.hex6(that), ref$.a = o.a, ref$) : o : o;
+            : o.hex
+              ? (that = re.hex3.exec(o.hex))
+                ? (ref$ = parse.hex3(that) || {}, ref$.a = o.a, ref$)
+                : (that = re.hex6.exec(o.hex)) ? (ref$ = parse.hex6(that), ref$.a = o.a, ref$) : o
+              : o.value ? o.value : o;
       } else if (typeof o === 'number') {
         return conv.num2rgb(o);
       }
