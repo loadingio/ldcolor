@@ -1,5 +1,4 @@
-ldColor = require "./main"
-d3-color = require "./d3-color"
+ldColor = require "../src/ldColor"
 
 console.log ldColor.hex(0xff9922)
 console.log ldColor.hcl("\#f92")

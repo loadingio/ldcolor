@@ -151,8 +151,8 @@
     yellow: 0xffff00,
     yellowgreen: 0x9acd32
   };
-  ReI = "\\s*([+-]?\\d+)\\s*";
-  ReN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)\\s*";
+  ReI = "\\s*([+-]?\\d+|nan|NaN)\\s*";
+  ReN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?|nan|NaN)\\s*";
   ReP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*";
   re = {
     hex3: /^#([0-9a-fA-F]{3})$/,
@@ -414,12 +414,16 @@
       }
       h = Math.atan2(b, a) * 180 / Math.PI;
       return {
-        h: h < 0
-          ? h + 360
-          : h > 0 ? h : 0,
+        h: isNaN(h)
+          ? h
+          : h < 0
+            ? h + 360
+            : h > 0 ? h : 0,
         c: Math.sqrt(a * a + b * b),
-        l: l > 0 ? l : 0,
-        a: (ref$ = o > 0 ? o : 0) < 1 ? ref$ : 1
+        l: isNaN(l)
+          ? l
+          : l > 0 ? l : 0,
+        a: o
       };
     },
     hcl2lab: function(v){
@@ -476,8 +480,10 @@
       v == null && (v = this);
       compact == null && (compact = false);
       ret = utils.rgb(v);
-      if (ret.a != null && isNaN(ret.a)) {
-        return "transparent";
+      if (ret.a != null && (isNaN(ret.a) || (!ret.a && ['r', 'g', 'b'].filter(function(it){
+        return ret[it] != null && isNaN(ret[it]);
+      })))) {
+        return 'transparent';
       }
       if (ret.a < 1) {
         return this.rgbaStr(ret);

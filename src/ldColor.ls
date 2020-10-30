@@ -113,10 +113,10 @@
       if a == 0 and b == 0 => return h: NaN, c: 0, l: l, a: o
       h = Math.atan2(b, a) * 180 / Math.PI
       return
-        h: if h < 0 => h + 360 else h >? 0
+        h: if isNaN(h) => h else if h < 0 => h + 360 else h >? 0
         c: Math.sqrt(a * a + b * b)
-        l: l >? 0
-        a: o >? 0 <? 1
+        l: if isNaN(l) => l else l >? 0
+        a: o
     hcl2lab: (v) ->
       v.a = if v.a? => v.a else 1
       if isNaN v.h => return {"@l": v.l, "@a": 0, "@b": 0, a: v.a}
