@@ -1,6 +1,7 @@
 {
-  "author": "Kirby Wu",
+  "author": "zbryikt",
   "name": "ldColor",
+  "main": "dist/ldColor.js",
   "license": "MIT",
   "description": "tiny js color library",
   "version": "0.0.1",
