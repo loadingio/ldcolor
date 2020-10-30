@@ -3,7 +3,7 @@
 lightweight JS color library, adopted from d3-color.
 
 
-# USAGE
+## USAGE
 
 construct a color object from some input, such as "#f00", "rgba(0,255,128,1)":
 
@@ -21,7 +21,7 @@ the result color will be in either RGBA or HSLA. Or, convert to the target forma
 ```
 
 
-# Spec
+## Spec
 
 ldColor is an object with following fields:
 
@@ -50,6 +50,34 @@ ldColor is an object with following fields:
 
 ldColor.js wont't write into offset, hex and mean fields.
 
-# LICENSE
+## API
+
+ldColor provides following API:
+
+ - `same(color1, color2)` - check if `color1` equals to `color2`.
+ - `rgb(color)` - convert `color` to RGB space ( range: 0 ~ 255 ).
+ - `rgbfv(color)` - convert `color` to RGB space ( range: 0 ~ 1 ).
+ - `web(color)` - convert `color` to web friendly string.
+ - `hex(color,compact)` - convert `color` to hex string. use `#fff` format when possible if `compact` is true.
+ - `rgbaStr(color)` - convert `color` to rgba string.
+ - `hsl(color)` - convert `color` to HSL space
+ - `hcl(color)` - convert `color` to HCL space
+ - `lab(color)` - convert `color` to LAB space
+ - `int(color)` - convert `color` to 24bit integer.
+ - `rand()` - randomize and return a color
+ - `light(color, strength)` - make `color` lighter
+ - `darker(color, strength)` - maerk `color` darker
+
+These API are also available as a member function in a `ldColor` object:
+
+    (new ldColor('#fff')).darker!
+
+
+## Boundary Condition
+
+ - there is no RGB information in `transparent` string, thus it will return `rgba(NaN,NaN,NaN,0)`.
+ - colors with NaN or semi-transparent colors can't be converted to hex code. Thus, in order to use them safely, use `ldColor.web` instead of `ldColor.hex` to convert colors if transparency is needed.
+
+## LICENSE
 
 MIT

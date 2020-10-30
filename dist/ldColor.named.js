@@ -245,7 +245,7 @@
               ? (that = re.hex3.exec(o.hex))
                 ? (ref$ = parse.hex3(that) || {}, ref$.a = o.a, ref$)
                 : (that = re.hex6.exec(o.hex)) ? (ref$ = parse.hex6(that), ref$.a = o.a, ref$) : o
-              : o.value ? o.value : o;
+              : o.value ? parse.all(o.value) : o;
       } else if (typeof o === 'number') {
         return conv.num2rgb(o);
       }
@@ -559,6 +559,22 @@
         l: Math.random(),
         a: 1
       };
+    },
+    lighter: function(v, k){
+      var hsl;
+      v == null && (v = this);
+      k == null && (k = 1);
+      hsl = utils.hsl(v);
+      hsl.l *= Math.pow(1 / 0.7, k);
+      return hsl;
+    },
+    darker: function(v, k){
+      var hsl;
+      v == null && (v = this);
+      k == null && (k = 1);
+      hsl = utils.hsl(v);
+      hsl.l *= Math.pow(0.7, k);
+      return hsl;
     }
   };
   import$(ldColor, utils);
