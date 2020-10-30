@@ -1,6 +1,6 @@
 {
   "author": "zbryikt",
-  "name": "ldColor",
+  "name": "ldcolor",
   "main": "dist/ldColor.js",
   "license": "MIT",
   "description": "tiny js color library",
