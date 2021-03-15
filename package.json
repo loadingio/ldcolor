@@ -3,6 +3,9 @@
   "name": "ldcolor",
   "main": "dist/ldColor.js",
   "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
   "description": "tiny js color library",
   "version": "0.0.2",
   "homepage": "https://github.com/loadingio/ldColor",
