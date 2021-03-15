@@ -4,7 +4,7 @@
   "main": "dist/ldColor.js",
   "license": "MIT",
   "description": "tiny js color library",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/loadingio/ldColor",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "cover": "./node_modules/.bin/nyc --reporter=text npm run test"
   },
   "dependencies": {
-    "LiveScript": ">=1.2.0",
+    "livescript": "^1.6.0",
     "uglify-js": "=3.2.0"
   },
   "devDependencies": {
