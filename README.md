@@ -1,4 +1,4 @@
-# ldColor
+# ldcolor
 
 lightweight JS color library, adopted from d3-color.
 
@@ -8,22 +8,22 @@ lightweight JS color library, adopted from d3-color.
 construct a color object from some input, such as "#f00", "rgba(0,255,128,1)":
 
 ```
-    color = new ldColor(some-color-object-or-string);
+    color = new ldcolor(some-color-object-or-string);
 ```
 
 the result color will be in either RGBA or HSLA. Or, convert to the target format directly:
 
 ```
-    ldColor.hex(0xff9922);
-    ldColor.hcl("#f92");
-    color = new ldColor("hsl(50%,50%,50%)");
+    ldcolor.hex(0xff9922);
+    ldcolor.hcl("#f92");
+    color = new ldcolor("hsl(50%,50%,50%)");
     rgb = color.rgb();
 ```
 
 
 ## Spec
 
-ldColor is an object with following fields:
+ldcolor is an object with following fields:
 
  * color space specific fields:
    * RGB
@@ -48,11 +48,11 @@ ldColor is an object with following fields:
    * Application Defined
      TBD.
 
-ldColor.js wont't write into offset, hex and mean fields.
+ldcolor.js wont't write into offset, hex and mean fields.
 
 ## API
 
-ldColor provides following API:
+ldcolor provides following API:
 
  - `same(color1, color2)` - check if `color1` equals to `color2`.
  - `rgb(color)` - convert `color` to RGB space ( range: 0 ~ 255 ).
@@ -68,15 +68,15 @@ ldColor provides following API:
  - `light(color, strength)` - make `color` lighter
  - `darker(color, strength)` - maerk `color` darker
 
-These API are also available as a member function in a `ldColor` object:
+These API are also available as a member function in a `ldcolor` object:
 
-    (new ldColor('#fff')).darker!
+    (new ldcolor('#fff')).darker!
 
 
 ## Boundary Condition
 
  - there is no RGB information in `transparent` string, thus it will return `rgba(NaN,NaN,NaN,0)`.
- - colors with NaN or semi-transparent colors can't be converted to hex code. Thus, in order to use them safely, use `ldColor.web` instead of `ldColor.hex` to convert colors if transparency is needed.
+ - colors with NaN or semi-transparent colors can't be converted to hex code. Thus, in order to use them safely, use `ldcolor.web` instead of `ldcolor.hex` to convert colors if transparency is needed.
 
 ## LICENSE
 

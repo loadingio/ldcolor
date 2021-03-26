@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-
+set -euo pipefail
+rm -rf dist
 mkdir -p dist
-rm dist/*.js
-echo "Transpiling ldColor.ls to ldColor.named.js..."
-npx lsc -cpb --no-header src/ldColor.ls > dist/ldColor.named.js
+echo "Transpiling ldcolor.ls to ldcolor.named.js..."
+npx lsc -cp --no-header src/ldcolor.ls > dist/ldcolor.named.js
 
-echo "Transpiling ldColor.ls without name list..."
-cat src/ldColor.ls | grep -v "named = " | lsc -cbsp > dist/ldColor.js
-echo "Uglify ldColor.named.js...."
-npx uglifyjs dist/ldColor.named.js > dist/ldColor.named.min.js
-echo "Uglify ldColor.js...."
-npx uglifyjs dist/ldColor.js > dist/ldColor.min.js
+echo "Transpiling ldcolor.ls without name list..."
+cat src/ldcolor.ls | grep -v "named = " | lsc -csp --no-header > dist/ldcolor.js
+echo "Uglify ldcolor.named.js...."
+npx uglifyjs dist/ldcolor.named.js > dist/ldcolor.named.min.js
+echo "Uglify ldcolor.js...."
+npx uglifyjs dist/ldcolor.js > dist/ldcolor.min.js
