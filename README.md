@@ -65,7 +65,7 @@ ldcolor provides following API:
  - `lab(color)` - convert `color` to LAB space
  - `int(color)` - convert `color` to 24bit integer.
  - `rand()` - randomize and return a color
- - `light(color, strength)` - make `color` lighter
+ - `lighter(color, strength)` - make `color` lighter
  - `darker(color, strength)` - maerk `color` darker
 
 These API are also available as a member function in a `ldcolor` object:
