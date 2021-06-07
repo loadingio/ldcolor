@@ -177,10 +177,15 @@ utils = do
 
   rand: -> {h: Math.random!*360, s: Math.random!, l: Math.random!, a: 1}
 
+  complement: (v) ->
+    rgb = utils.rgb v
+    return utils.hsl({r: (255 - rgb.r), g: (255 - rgb.g), b: (255 - rgb.b)})
+
   lighter: (v = @, k = 1) ->
     hsl = utils.hsl(v)
     hsl.l *= ((1/0.7) ** k)
     return hsl
+
   darker: (v = @, k = 1) ->
     hsl = utils.hsl(v)
     hsl.l *= ((0.7) ** k)

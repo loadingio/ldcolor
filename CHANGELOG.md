@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.0.4
+
+ - add API `complement` for calculating complementary of colors.
+
+
 ## v0.0.3
 
  - wrap code by lsc instead of wrapping manually so lsc generated functions can also be wrapped.

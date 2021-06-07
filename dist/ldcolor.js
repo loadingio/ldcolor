@@ -415,6 +415,15 @@
         a: 1
       };
     },
+    complement: function(v){
+      var rgb;
+      rgb = utils.rgb(v);
+      return utils.hsl({
+        r: 255 - rgb.r,
+        g: 255 - rgb.g,
+        b: 255 - rgb.b
+      });
+    },
     lighter: function(v, k){
       var hsl;
       v == null && (v = this);

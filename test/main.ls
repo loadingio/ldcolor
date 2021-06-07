@@ -14,6 +14,11 @@ describe \API, ->
       assert.equal ldcolor.web((new ldcolor(\#123456)).lighter!), \#1a4a7b
       assert.equal ldcolor.web(ldcolor.lighter(\#123456)), \#1a4a7b
 
+  describe "complement", ->
+    that 'should be #edcba9 after complementing #123456', ->
+      assert.equal ldcolor.web((new ldcolor(\#123456)).complement!), \#edcba9
+      assert.equal ldcolor.web(ldcolor.complement(\#123456)), \#edcba9
+
 describe \Transparency, ->
   describe 'color with NaN to web color', ->
     that "should return transparent when alpha is NaN, or alpha is 0 but there are NaN values", ->

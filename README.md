@@ -66,7 +66,8 @@ ldcolor provides following API:
  - `int(color)` - convert `color` to 24bit integer.
  - `rand()` - randomize and return a color
  - `lighter(color, strength)` - make `color` lighter
- - `darker(color, strength)` - maerk `color` darker
+ - `darker(color, strength)` - make `color` darker
+ - `complement(color)` - get complementary of `color`
 
 These API are also available as a member function in a `ldcolor` object:
 

@@ -7,7 +7,7 @@
     "dist/**/*"
   ],
   "description": "tiny js color library",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/loadingio/ldColor",
   "repository": {
     "type": "git",
