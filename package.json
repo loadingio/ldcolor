@@ -1,13 +1,14 @@
 {
   "author": "zbryikt",
   "name": "ldcolor",
-  "main": "dist/ldColor.js",
+  "browser": "dist/index.min.js",
+  "main": "dist/index.min.js",
   "license": "MIT",
   "files": [
     "dist/**/*"
   ],
   "description": "tiny js color library",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "homepage": "https://github.com/loadingio/ldColor",
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "uglify-js": "=3.2.0"
   },
   "devDependencies": {
+    "fedep": "^1.1.0",
     "mocha": "^8.2.0",
     "nyc": "^15.1.0"
   },

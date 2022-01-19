@@ -2,12 +2,12 @@
 set -euo pipefail
 rm -rf dist
 mkdir -p dist
-echo "Transpiling ldcolor.ls to ldcolor.named.js..."
-npx lsc -cp --no-header src/ldcolor.ls > dist/ldcolor.named.js
+echo "Transpiling index.ls to index.named.js..."
+./node_modules/.bin/lsc -cp --no-header src/index.ls > dist/index.named.js
 
-echo "Transpiling ldcolor.ls without name list..."
-cat src/ldcolor.ls | grep -v "named = " | lsc -csp --no-header > dist/ldcolor.js
-echo "Uglify ldcolor.named.js...."
-npx uglifyjs dist/ldcolor.named.js > dist/ldcolor.named.min.js
-echo "Uglify ldcolor.js...."
-npx uglifyjs dist/ldcolor.js > dist/ldcolor.min.js
+echo "Transpiling index.ls without name list..."
+cat src/index.ls | grep -v "named = " | lsc -csp --no-header > dist/index.js
+echo "Uglify index.named.js...."
+./node_modules/.bin/uglifyjs dist/index.named.js -m -c > dist/index.named.min.js
+echo "Uglify index.js...."
+./node_modules/.bin/uglifyjs dist/index.js -m -c > dist/index.min.js
