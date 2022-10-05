@@ -2,8 +2,8 @@ named = aliceblue: 0xf0f8ff, antiquewhite: 0xfaebd7, aqua: 0x00ffff, aquamarine:
 
 # regular expression adopted from d3-color
 ReI = "\\s*([+-]?\\d+|nan|NaN)\\s*"
-ReN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?|nan|NaN)\\s*"
-ReP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*"
+ReN = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?|nan|NaN)\\s*"
+ReP = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)%\\s*"
 re = do
   hex3: /^#([0-9a-fA-F]{3})$/
   hex6: /^#([0-9a-fA-F]{6})$/

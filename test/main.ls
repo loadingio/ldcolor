@@ -1,8 +1,16 @@
-ldcolor = require "../src/ldColor"
+ldcolor = require "../src/index"
 
 require! <[assert]>
 
 that = it
+describe \ReDoS, ->
+  that 'big input should be parsed instantly', ->
+    v = ("1" * 10000) + ".0%"
+    t1 = Date.now!
+    ldcolor("rgb(#v,#v,#v");
+    t2 = Date.now!
+    assert.equal ((t2 - t1) < 10), true
+
 describe \API, ->
   describe "darker", ->
     that 'should be #fc93a8 after darkering #fedcba', ->

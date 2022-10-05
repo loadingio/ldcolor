@@ -1,8 +1,8 @@
 (function(){
   var ReI, ReN, ReP, re, parse, ldcolor, t0, t1, t2, t3, Xn, Yn, Zn, conv, utils, k, v;
   ReI = "\\s*([+-]?\\d+|nan|NaN)\\s*";
-  ReN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?|nan|NaN)\\s*";
-  ReP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*";
+  ReN = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?|nan|NaN)\\s*";
+  ReP = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)%\\s*";
   re = {
     hex3: /^#([0-9a-fA-F]{3})$/,
     hex6: /^#([0-9a-fA-F]{6})$/,
