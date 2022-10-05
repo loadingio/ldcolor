@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "fedep": "^1.1.0",
-    "mocha": "^8.2.0",
+    "mocha": "^10.0.0",
     "nyc": "^15.1.0"
   },
   "nyc": {
