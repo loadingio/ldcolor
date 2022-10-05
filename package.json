@@ -8,11 +8,11 @@
     "dist/**/*"
   ],
   "description": "tiny js color library",
-  "version": "1.0.0",
-  "homepage": "https://github.com/loadingio/ldColor",
+  "version": "1.0.1",
+  "homepage": "https://github.com/loadingio/ldcolor",
   "repository": {
     "type": "git",
-    "url": "https://github.com/loadingio/ldColor"
+    "url": "https://github.com/loadingio/ldcolor"
   },
   "engines": {
     "node": ">=0.12.6",
