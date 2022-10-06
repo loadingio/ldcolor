@@ -134,6 +134,7 @@ utils = do
     if ret.h? => return conv.hsl2rgb(ret) else ret
   rgbfv: (v = @) -> ret = @rgb(v); return [ret.r / 255, ret.g / 255, ret.b / 255]
   web: (v = @, compact = false) ->
+    if "#{v or ''}".toLowerCase! == \currentcolor => return v
     ret = utils.rgb v
     # alpha defined but is NaN, or
     # alpha is 0 and anyone of r,g,b is NaN.

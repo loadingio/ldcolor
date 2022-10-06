@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.0
+
+ - support `currentColor` in `ldcolor.web`
+
+
 ## v1.0.1
 
  - fix ReDoS vulnerability (RegEx adopted from d3-color, see: https://github.com/d3/d3-color/issues/97)

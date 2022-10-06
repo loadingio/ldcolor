@@ -328,6 +328,9 @@
       var ret;
       v == null && (v = this);
       compact == null && (compact = false);
+      if (((v || '') + "").toLowerCase() === 'currentcolor') {
+        return v;
+      }
       ret = utils.rgb(v);
       if (ret.a != null && (isNaN(ret.a) || (!ret.a && ['r', 'g', 'b'].filter(function(it){
         return ret[it] != null && isNaN(ret[it]);
