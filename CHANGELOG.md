@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.1.1
+
+ - upgrade modules to fix vulnerabilities
+ - move modules which are meant for developmenet from dependencies to devDependencies
+ - fix bug: ldcolor.web always return `transparent` for colors with `a` = 0, regardless if it's valid in any other components.
+
+
 ## v1.1.0
 
  - support `currentColor` in `ldcolor.web`

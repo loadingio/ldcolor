@@ -138,7 +138,7 @@ utils = do
     ret = utils.rgb v
     # alpha defined but is NaN, or
     # alpha is 0 and anyone of r,g,b is NaN.
-    if ret.a? and (isNaN(ret.a) or (!ret.a and <[r g b]>.filter(->ret[it]? and isNaN(ret[it])))) =>
+    if ret.a? and (isNaN(ret.a) or (!ret.a and <[r g b]>.filter(->ret[it]? and isNaN(ret[it])).length)) =>
       return \transparent
     if ret.a < 1 => @rgbaStr ret else @hex ret, compact
   rgbaStr: (v = @) ->

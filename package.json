@@ -8,7 +8,7 @@
     "dist/**/*"
   ],
   "description": "tiny js color library",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/loadingio/ldcolor",
   "repository": {
     "type": "git",
@@ -22,12 +22,10 @@
     "test": "./node_modules/.bin/mocha --require livescript ./test/main.ls",
     "cover": "./node_modules/.bin/nyc --reporter=text npm run test"
   },
-  "dependencies": {
-    "livescript": "^1.6.0",
-    "uglify-js": "=3.2.0"
-  },
   "devDependencies": {
-    "fedep": "^1.1.0",
+    "livescript": "^1.6.0",
+    "uglify-js": "^3.13.1",
+    "fedep": "^1.1.11",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0"
   },
