@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.2
+
+ - fix bug: `ldcolor.same` may return different results when user provide the same color in different formats.
+
+
 ## v1.1.1
 
  - upgrade modules to fix vulnerabilities

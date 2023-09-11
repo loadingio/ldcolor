@@ -27,6 +27,13 @@ describe \API, ->
       assert.equal ldcolor.web((new ldcolor(\#123456)).complement!), \#edcba9
       assert.equal ldcolor.web(ldcolor.complement(\#123456)), \#edcba9
 
+  describe "same", ->
+    that 'should be the same', ->
+      c1 = {r: 195.35167464114833, g: 100.31675679347329, b: 76.30787937457279, a: 1}
+      c2 = "rgba(195, 100, 76, 1)"
+      assert.equal(ldcolor.same(c1, c2), true)
+      assert.equal(ldcolor.same(c1, c2), ldcolor.same(ldcolor.hex(c1), ldcolor.hex(c2)))
+
 describe \Transparency, ->
   describe 'color with NaN to web color', ->
     that "should return transparent when alpha is NaN, or alpha is 0 but there are NaN values", ->

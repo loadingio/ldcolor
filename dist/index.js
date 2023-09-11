@@ -302,8 +302,8 @@
     same: function(a, b){
       var ref$;
       b == null && (b = this);
-      ref$ = [this.rgb(a), this.rgb(b)], a = ref$[0], b = ref$[1];
-      return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
+      ref$ = [this.rgb(this.rgbaStr(a)), this.rgb(this.rgbaStr(b))], a = ref$[0], b = ref$[1];
+      return a.r === b.r && a.g === b.g && a.b === b.b && (a.a || 1).toFixed(3) === (b.a || 1).toFixed(3);
     },
     rgb: function(v){
       var ret;

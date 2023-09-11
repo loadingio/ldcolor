@@ -55,6 +55,8 @@ ldcolor.js wont't write into offset, hex and mean fields.
 ldcolor provides following API:
 
  - `same(color1, color2)` - check if `color1` equals to `color2`.
+   - colors are checked after converted to integer RGB with alpha channel to 3 decimal points,
+     to prevent inconsistency between conversion of hex, hsl and other formats.
  - `rgb(color)` - convert `color` to RGB space ( range: 0 ~ 255 ).
  - `rgbfv(color)` - convert `color` to RGB space ( range: 0 ~ 1 ).
  - `web(color)` - convert `color` to web friendly string.

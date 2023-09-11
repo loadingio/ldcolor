@@ -126,8 +126,17 @@ conv = do
 
 utils = do
   same: (a, b = @) ->
-    [a,b] = [@rgb(a), @rgb(b)]
-    return ( a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a )
+    [a,b] = [@rgb(@rgbaStr a), @rgb(@rgbaStr b)]
+    # for consistent result and prevent following scenario when there are floating points:
+    #
+    #   ldcolor.same(a,b) != ldcolor.same(ldcolor.hex(a),ldcolor.hex(b))
+    #
+    # we compare colors into integer rgb + alpha(to three decimal points)
+    # we may still support strict comparison by additional parameter in the future.
+    return (
+      a.r == b.r and a.g == b.g and a.b == b.b and
+      (a.a or 1).toFixed(3) == (b.a or 1).toFixed(3)
+    )
   rgb: (v = @) ->
     ret = parse.all v
     if ret.c? => return conv.lab2rgb conv.hcl2lab ret
