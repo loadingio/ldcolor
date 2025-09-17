@@ -352,7 +352,7 @@
     hsl: function(v){
       var ret;
       v == null && (v = this);
-      ret = parse.all(v);
+      ret = import$({}, parse.all(v));
       if (ret.r != null) {
         return conv.rgb2hsl(ret);
       } else {

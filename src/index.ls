@@ -27,6 +27,7 @@ parse = do
   rgbap: (v) -> r: v.1 * 255 / 100, g: +v.2 * 255 / 100, b: v.3 * 255 / 100, a: +v.4
   hslap: (v) -> h: +v.1, s: v.2 / 100, l: v.3 / 100, a: +v.4
   hslp: (v) -> h: +v.1, s: v.2 / 100, l: v.3 / 100, a: 1
+  # all may return the original object. be sure to clone the returned value if necessary
   all: (o) ->
     if typeof(o) == \object =>
       if !(o.a?) => o.a = 1
@@ -154,7 +155,7 @@ utils = do
     ret = utils.rgb v
     "rgba(#{Math.round ret.r}, #{Math.round ret.g}, #{Math.round ret.b}, #{ret.a})"
   hsl: (v = @) ->
-    ret = parse.all v
+    ret = {} <<< parse.all v
     if ret.r? => return conv.rgb2hsl(ret) else ret
   hex: (v = @, compact = false) ->
     if v? and typeof(v) == \boolean => [v,compact] = [@, v]
